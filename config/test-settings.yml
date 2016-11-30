@@ -1,0 +1,4 @@
+database:
+  database: TAS-MarioChat_test
+
+auth-dummy-login: true
