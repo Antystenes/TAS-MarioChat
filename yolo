@@ -5,23 +5,26 @@
                 Mario Chat
             <h2>
                 It's a me! Mario!
+
 <div .container>
+    <hr>
+
     <!-- JSON
         ================================================== -->
     <div .bs-docs-section>
         <div .row>
             <div .col-lg-12>
                 <div .page-header>
-                    <h1 #json>Post request test
+                    <h1 #json>Form test
 
                     <p>
-                        Testowanie post requestów. Możliwe do wykonania tylko po zalogowaniu się.
+                        tu ma być napis ;-;
         <div .row>
             <div .col-lg-6>
                 <div .bs-callout.bs-callout-info.well>
                     <form .form-horizontal ##{commentFormId}>
                         <div .field>
-                            <textarea rows="2" ##{commentTextareaId} placeholder="Tutaj piszesz text..." required></textarea>
+                            <textarea rows="2" ##{commentTextareaId} placeholder="Tu pisz" required></textarea>
 
                         <button .btn.btn-primary type=submit>
                            Create comment
@@ -29,6 +32,6 @@
            <div .col-lg-4.col-lg-offset-1>
                <div .bs-callout.bs-callout-info>
                    <small>
-                        Tuaj tekst się pojawi:
+                       Your comments will appear here. You can also open the
+                       console log to see the raw response from the server.
                    <ul ##{commentListId}>
-
