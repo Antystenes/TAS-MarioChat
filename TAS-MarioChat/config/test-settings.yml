@@ -1,4 +1,4 @@
 database:
-  database: yesodmongo_test
+  database: TAS-MarioChat_test
 
 auth-dummy-login: true

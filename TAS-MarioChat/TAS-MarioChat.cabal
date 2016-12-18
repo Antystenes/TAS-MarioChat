@@ -1,4 +1,4 @@
-name:              yesodmongo
+name:              TAS-MarioChat
 version:           0.0.0
 cabal-version:     >= 1.8
 build-type:        Simple
@@ -22,8 +22,6 @@ library
                      Settings.StaticFiles
                      Handler.Common
                      Handler.Home
-                     Handler.Comment
-                     Handler.Profile
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT
@@ -60,6 +58,7 @@ library
                  , yesod-auth                    >= 1.4.0      && < 1.5
                  , yesod-static                  >= 1.4.0.3    && < 1.6
                  , yesod-form                    >= 1.4.0      && < 1.5
+                 , yesod-websockets
                  , classy-prelude                >= 0.10.2
                  , classy-prelude-conduit        >= 0.10.2
                  , classy-prelude-yesod          >= 0.10.2
@@ -91,14 +90,16 @@ library
                  , time
                  , case-insensitive
                  , wai
+                 , wai-websockets
+                 , blaze-builder
 
-executable         yesodmongo
+executable         TAS-MarioChat
     if flag(library-only)
         Buildable: False
 
     main-is:           main.hs
     hs-source-dirs:    app
-    build-depends:     base, yesodmongo
+    build-depends:     base, TAS-MarioChat
 
     ghc-options:       -threaded -rtsopts -with-rtsopts=-N
 
@@ -123,10 +124,8 @@ executable         yesodmongo
 test-suite test
     type:              exitcode-stdio-1.0
     main-is:           Spec.hs
-    other-modules:     Handler.CommentSpec
-                       Handler.CommonSpec
+    other-modules:     Handler.CommonSpec
                        Handler.HomeSpec
-                       Handler.ProfileSpec
                        TestImport
     hs-source-dirs:    test
     ghc-options:       -Wall
@@ -150,7 +149,7 @@ test-suite test
                 CPP
 
     build-depends: base
-                 , yesodmongo
+                 , TAS-MarioChat
                  , yesod-auth
                  , yesod-test >= 1.5.2 && < 1.6
                  , yesod-core

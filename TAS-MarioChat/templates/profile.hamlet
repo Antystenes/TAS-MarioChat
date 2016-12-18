@@ -1,13 +1,4 @@
-<div .masthead>
-    <div .container>
-        <div .row>
-            <h1 .header>
-                Mario Chat
-            <h2>
-                It's a me! Mario!
-<div .container>
-    <!-- JSON
-        ================================================== -->
+<div .ui.container>
     <div .bs-docs-section>
         <div .row>
             <div .col-lg-12>
@@ -31,4 +22,4 @@
                    <small>
                         Tuaj tekst się pojawi:
                    <ul ##{commentListId}>
-
+                       #{comments}
