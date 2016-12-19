@@ -8,6 +8,7 @@ import Text.Jasmine                (minifym)
 -- Used only when in "auth-dummy-login" setting is enabled.
 import Yesod.Auth.Dummy
 
+import Yesod.WebSockets
 import Yesod.Auth.OpenId           (authOpenId, IdentifierType (Claimed))
 import Yesod.Core.Types            (Logger)
 import Yesod.Default.Util          (addStaticContentExternal)
@@ -25,6 +26,7 @@ data App = App
     , appConnPool    :: ConnectionPool -- ^ Database connection pool.
     , appHttpManager :: Manager
     , appLogger      :: Logger
+    , appChat        :: TChan Text
     }
 
 data MenuItem = MenuItem

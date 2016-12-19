@@ -28,7 +28,7 @@ import Network.Wai.Middleware.RequestLogger (Destination (Logger),
                                              mkRequestLogger, outputFormat)
 import System.Log.FastLogger                (defaultBufSize, newStdoutLoggerSet,
                                              toLogStr)
-
+import Yesod.WebSockets
 -- Import all relevant handler modules here.
 -- Don't forget to add new modules to your cabal file!
 import Handler.Common
@@ -56,7 +56,7 @@ makeFoundation appSettings = do
     -- Create the database connection pool
     appConnPool <- createPoolConfig $ appDatabaseConf appSettings
 --    getChat <- Chat <$> newChan
-
+    appChat <- atomically newBroadcastTChan
     -- Return the foundation
     return App {..}
 
@@ -113,7 +113,7 @@ getAppSettings = loadYamlSettings [configSettingsYml] [] useEnv
 -- | main function for use by yesod devel
 develMain :: IO ()
 develMain = develMainHelper getApplicationDev
-4
+
 -- | The @main@ function for an executable running this site.
 appMain :: IO ()
 appMain = do
