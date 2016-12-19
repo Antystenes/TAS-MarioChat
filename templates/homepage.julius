@@ -9,6 +9,7 @@ conn.onmessage = function(e) {
     var p = document.createElement("p");
     p.appendChild(document.createTextNode(e.data));
     output.appendChild(p);
+    output.scrollTo(0,output.scrollHeight);
 };
 form.addEventListener("submit", function(e){
     conn.send(input.value);
