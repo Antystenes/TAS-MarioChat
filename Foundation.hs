@@ -7,9 +7,10 @@ import Text.Jasmine                (minifym)
 
 -- Used only when in "auth-dummy-login" setting is enabled.
 import Yesod.Auth.Dummy
-
 import Yesod.WebSockets
 import Yesod.Auth.OpenId           (authOpenId, IdentifierType (Claimed))
+import Yesod.Auth.Message
+import Yesod.Auth.HashDB           (HashDBUser(..), authHashDB)
 import Yesod.Core.Types            (Logger)
 import Yesod.Default.Util          (addStaticContentExternal)
 import qualified Yesod.Core.Unsafe as Unsafe
@@ -55,6 +56,10 @@ mkYesodData "App" $(parseRoutesFile "config/routes")
 
 -- | A convenient synonym for creating forms.
 type Form x = Html -> MForm (HandlerT App IO) (FormResult x, Widget)
+
+instance HashDBUser User where
+    userPasswordHash = Just . userPassword
+    setPasswordHash h u = u { userPassword = h}
 
 -- Please see the documentation for the Yesod typeclass. There are a number
 -- of settings which can be configured by overriding methods here.
@@ -104,12 +109,17 @@ instance Yesod App where
 --                    , menuItemAccessCallback = isJust muser
 --                    }
                 , NavbarRight $ MenuItem
-                    { menuItemLabel = "Login"
+                    { menuItemLabel = "Zaloguj"
                     , menuItemRoute = AuthR LoginR
                     , menuItemAccessCallback = isNothing muser
                     }
                 , NavbarRight $ MenuItem
-                    { menuItemLabel = "Logout"
+                    { menuItemLabel = "Zarejestruj"
+                    , menuItemRoute = RegR
+                    , menuItemAccessCallback = isNothing muser
+                    }
+                , NavbarRight $ MenuItem
+                    { menuItemLabel = "Wyloguj"
                     , menuItemRoute = AuthR LogoutR
                     , menuItemAccessCallback = isJust muser
                     }
@@ -143,6 +153,7 @@ instance Yesod App where
     isAuthorized FaviconR _ = return Authorized
     isAuthorized RobotsR _ = return Authorized
     isAuthorized (StaticR _) _ = return Authorized
+    isAuthorized RegR _ = return Authorized
 --    isAuthorized ChatR _ = isAuthenticated
 --    isAuthorized ProfileR _ = isAuthenticated
 
@@ -206,15 +217,16 @@ instance YesodAuth App where
         case x of
             Just (Entity uid _) -> return $ Authenticated uid
             -- Dummy Login. Remove when finished registration
-            Nothing -> Authenticated <$> insert User
-                { userIdent = credsIdent creds
-                , userPassword = Nothing
-                }
+            Nothing -> return $ UserError InvalidUsernamePass
+              --Authenticated <$> insert User
+              --  { userIdent = credsIdent creds
+              --  , userPassword = " "
+              --  }
 
     -- You can add other plugins like Google Email, email or OAuth here
-    authPlugins app = [authOpenId Claimed []] ++ extraAuthPlugins
+    authPlugins app = [ authHashDB (Just . UniqueUser)] -- [authOpenId Claimed []] -- ++ extraAuthPlugins
         -- Enable authDummy login if enabled.
-        where extraAuthPlugins = [authDummy | appAuthDummyLogin $ appSettings app]
+--        where extraAuthPlugins = [authDummy | appAuthDummyLogin $ appSettings app] ++ [ authHashDB (Just . UniqueUser)]
 
     authHttpManager = getHttpManager
 
