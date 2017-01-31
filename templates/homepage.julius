@@ -1,3 +1,4 @@
+window.scrollTo(0,document.body.scrollHeight);
 var url = document.URL,
     output = document.getElementById("output"),
     form = document.getElementById("form"),

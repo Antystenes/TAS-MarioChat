@@ -1,6 +1,7 @@
 User
     ident Text
     password Text
+    isAdmin Bool
     UniqueUser ident
     deriving Typeable
     deriving Show
@@ -14,6 +15,11 @@ Comment json -- Adding "json" causes ToJSON and FromJSON instances to be derived
     userId UserId Maybe
     username Text Maybe
     --posted UTCTime
+    deriving Eq
+    deriving Show
+MessageLog
+    message Text
+    username Text
     deriving Eq
     deriving Show
 

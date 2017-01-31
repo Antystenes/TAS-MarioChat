@@ -19,7 +19,7 @@ getRobotsR :: Handler TypedContent
 getRobotsR = return $ TypedContent typePlain
                     $ toContent $(embedFile "config/robots.txt")
 
-regForm :: Html -> MForm Handler(FormResult User, Widget)
+regForm :: Html -> MForm Handler(FormResult (Bool -> User), Widget)
 regForm = renderDivs $ User
   <$> areq textField "Username" Nothing
   <*> areq passwordField "Password" Nothing
@@ -39,11 +39,13 @@ postRegR :: Handler Html
 postRegR = do
   ((result, widget), enctype) <- runFormPost regForm
   case result of
-    FormSuccess user -> do runDB $ insert ( unsafePerformIO $ setPassword (userPassword user) user)
-                           defaultLayout
-                             [whamlet|
-                                     <p> Successfully added user
-                                     |]
+    FormSuccess us -> do
+      let user = us False
+      runDB $ insert ( unsafePerformIO $ setPassword (userPassword user) user)
+      defaultLayout
+        [whamlet|
+                <p> Successfully added user
+                |]
 --                           redirect RedirectSeeOther HomeR
     _ -> defaultLayout
             [whamlet|
@@ -52,3 +54,11 @@ postRegR = do
                     ^{widget}
                     <button>Submit
             |]
+
+postUserDelete :: Text -> Handler Html
+postUserDelete uname = do
+  runDB $ deleteWhere [UserIdent ==. uname]
+  defaultLayout
+    [whamlet|
+            <p> Removed #{uname}
+|]

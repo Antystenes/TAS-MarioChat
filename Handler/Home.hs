@@ -15,9 +15,10 @@ chatApp = do
         dupTChan writeChan
     race_
         (forever $ atomically (readTChan readChan) >>= sendTextData)
-        (sourceWS $$ mapM_C (\msg ->
-                               atomically $ writeTChan writeChan $ name <> ": " <> msg))
-
+        (sourceWS $$  mapM_C (\msg -> do
+                               --(runDB $ insert (MessageLog msg (userIdent user)))
+                               atomically $ writeTChan writeChan $ name <> ": " <> msg
+                            ))
 -- This is a handler function for the GET request method on the HomeR
 -- resource pattern. All of your resource patterns are defined in
 -- config/routes
@@ -28,42 +29,20 @@ chatApp = do
 getHomeR :: Handler Html
 getHomeR = do
     webSockets chatApp
-    defaultLayout $ do
+    defaultLayout homeWidget
+
+homeWidget = do
         ili <- handlerToWidget isLoggedIn
+        master <- getYesod
         aDomId <- newIdent
         setTitle "Mario Chat"
         $(widgetFile "homepage")
-        if ili
-          then do
-          -- Logged in: show the widget
-            [whamlet|
-                <div>
-                    <h2>Chat
-                    <div #output>
-                    <form #form>
-                        <input #input type=text placeholder="Enter Message">
-            |]
-          else do
-            -- User isn't logged in, give a not-logged-in message.
-            master <- getYesod
-            [whamlet|
-                <p>
-                    You must be #
-                    $maybe ar <- authRoute master
-                        <a href=@{ar}>logged in
-                    $nothing
-                        logged in
-                    \ to chat.
-            |]
-    where
-          isLoggedIn = do
+    where isLoggedIn = do
             ma <- maybeAuthId
             return $ maybe False (const True) ma
+
 
 postHomeR :: Handler Html
 postHomeR = do
     let handlerName = "postHomeR" :: Text
-    defaultLayout $ do
-        aDomId <- newIdent
-        setTitle "Mario Chat"
-        $(widgetFile "homepage")
+    defaultLayout homeWidget

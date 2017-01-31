@@ -1,0 +1,25 @@
+.userTab {
+  width: 75%;
+  border: 1px solid black;
+}
+
+.tabElem {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.titRow {
+  border: 1px solid black;
+}
+
+.tabTit {
+  font-size: 20;
+}
+
+.tabDiv {
+  overflow-y:auto;
+  height: 500px;
+}
+
+tr:nth-child(even) {background-color: #f8f8f8}
+tr:hover{background-color:#f0f0f0}

@@ -1,0 +1,6 @@
+<div .container .tabDiv>
+  <table .userTab>
+    <tr .titRow>
+      <th .tabTit> Nazwa użytkownika
+      <th .tabTit> Usuń
+    ^{users}

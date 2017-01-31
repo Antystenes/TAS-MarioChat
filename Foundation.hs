@@ -95,7 +95,7 @@ instance Yesod App where
 
         -- Get the breadcrumbs, as defined in the YesodBreadcrumbs instance.
         (title, parents) <- breadcrumbs
-
+        let madmin = userIsAdmin . snd <$> muser
         -- Define the menu items of the header.
         let menuItems =
                 [ NavbarLeft $ MenuItem
@@ -103,11 +103,13 @@ instance Yesod App where
                     , menuItemRoute = HomeR
                     , menuItemAccessCallback = True
                     }
---                , NavbarLeft $ MenuItem
---                    { menuItemLabel = "Profile"
---                    , menuItemRoute = ProfileR
---                    , menuItemAccessCallback = isJust muser
---                    }
+                , NavbarLeft $ MenuItem
+                    { menuItemLabel = "Admin Panel"
+                    , menuItemRoute = PanelR
+                    , menuItemAccessCallback = case madmin of
+                        Nothing -> False
+                        Just a -> a
+                    }
                 , NavbarRight $ MenuItem
                     { menuItemLabel = "Zaloguj"
                     , menuItemRoute = AuthR LoginR
@@ -154,6 +156,8 @@ instance Yesod App where
     isAuthorized RobotsR _ = return Authorized
     isAuthorized (StaticR _) _ = return Authorized
     isAuthorized RegR _ = return Authorized
+    isAuthorized PanelR _ = isAdmin
+    isAuthorized (UserDelete _) _ = isAdmin
 --    isAuthorized ChatR _ = isAuthenticated
 --    isAuthorized ProfileR _ = isAuthenticated
 
@@ -237,6 +241,14 @@ isAuthenticated = do
     return $ case muid of
         Nothing -> Unauthorized "You must login to access this page"
         Just _ -> Authorized
+
+isAdmin :: Handler AuthResult
+isAdmin = do
+  muser <- maybeAuthPair
+  let madmin = userIsAdmin . snd <$> muser
+  return $ case madmin of
+    Nothing -> Unauthorized "You must login as administrator to access this page"
+    Just a -> if a then Authorized else Unauthorized "You lack Administrator rights2"
 
 instance YesodAuthPersist App
 
