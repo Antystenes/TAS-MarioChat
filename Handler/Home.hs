@@ -16,16 +16,10 @@ chatApp = do
     race_
         (forever $ atomically (readTChan readChan) >>= sendTextData)
         (sourceWS $$  mapM_C (\msg -> do
-                               --(runDB $ insert (MessageLog msg (userIdent user)))
+                               lift (runDB $ insert (MessageLog msg (userIdent user)))
                                atomically $ writeTChan writeChan $ name <> ": " <> msg
                             ))
--- This is a handler function for the GET request method on the HomeR
--- resource pattern. All of your resource patterns are defined in
--- config/routes
---
--- The majority of the code you will write in Yesod lives in these handler
--- functions. You can spread them across multiple files if you are so
--- inclined, or create a single monolithic file.
+
 getHomeR :: Handler Html
 getHomeR = do
     webSockets chatApp

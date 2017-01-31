@@ -1,6 +1,8 @@
-<div .container .tabDiv>
+<div .container .tabHead>
   <table .userTab>
     <tr .titRow>
       <th .tabTit> Nazwa użytkownika
       <th .tabTit> Usuń
-    ^{users}
+  <div .container .tabDiv>
+    <table .userTab>
+      ^{users}

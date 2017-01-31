@@ -1,10 +1,10 @@
 .userTab {
-  width: 75%;
+  width: 100%;
   border: 1px solid black;
 }
 
 .tabElem {
-  padding: 10px;
+  padding: 7px;
   border-bottom: 1px solid #ddd;
 }
 
@@ -13,12 +13,21 @@
 }
 
 .tabTit {
+  padding: 10px;
   font-size: 20;
 }
 
 .tabDiv {
   overflow-y:auto;
-  height: 500px;
+  height: 450px;
+}
+
+.tabHead{
+
+}
+
+.adminEl {
+  color: red;
 }
 
 tr:nth-child(even) {background-color: #f8f8f8}

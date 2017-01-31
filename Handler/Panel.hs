@@ -13,11 +13,12 @@ getPanelR = do
             let notA = not . userIsAdmin $ x
                 name = userIdent x
             [whamlet| <tr>
-                        <th .tabElem> #{name}
                         $if notA
+                          <th .tabElem> #{name}
                           <th .tabElem>
                             <form method=post action=@{UserDelete name}>
                               <button type="submit" > Usuń
                         $else
+                          <th .tabElem .adminEl> #{name}
                           <th .tabElem .adminEl> Administrator|]
           --table :: Handler Html -> Handler Html
