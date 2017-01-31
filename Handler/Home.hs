@@ -1,6 +1,8 @@
 module Handler.Home where
 
 import Import
+import System.IO.Unsafe
+import Data.Time
 import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3)
 import Yesod.WebSockets
 
@@ -16,7 +18,7 @@ chatApp = do
     race_
         (forever $ atomically (readTChan readChan) >>= sendTextData)
         (sourceWS $$  mapM_C (\msg -> do
-                               lift (runDB $ insert (MessageLog msg (userIdent user)))
+                               lift (runDB $ insert (MessageLog msg (userIdent user) (pack . show . unsafePerformIO $ getZonedTime)))
                                atomically $ writeTChan writeChan $ name <> ": " <> msg
                             ))
 
