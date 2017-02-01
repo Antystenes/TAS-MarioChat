@@ -21,6 +21,7 @@ MessageLog
     message Text
     username Text
     date Text
+    room Int
     deriving Eq
     deriving Show
 

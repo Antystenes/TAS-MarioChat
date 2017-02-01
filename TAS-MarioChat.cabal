@@ -23,7 +23,8 @@ library
                      Handler.Common
                      Handler.Home
                      Handler.Panel
-
+                     Handler.Chat
+                     
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT
         ghc-options:   -Wall -fwarn-tabs -O0

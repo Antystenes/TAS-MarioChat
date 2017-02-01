@@ -34,6 +34,7 @@ import Yesod.WebSockets
 import Handler.Common
 import Handler.Home
 import Handler.Panel
+import Handler.Chat
 -- This line actually creates our YesodDispatch instance. It is the second half
 -- of the call to mkYesodData which occurs in Foundation.hs. Please see the
 -- comments there for more details.
@@ -56,7 +57,9 @@ makeFoundation appSettings = do
     -- Create the database connection pool
     appConnPool <- createPoolConfig $ appDatabaseConf appSettings
 --    getChat <- Chat <$> newChan
-    appChat <- atomically newBroadcastTChan
+    chat0 <- atomically newBroadcastTChan
+    chat1 <- atomically newBroadcastTChan
+    let appChat = [chat0, chat1]
     -- Return the foundation
     return App {..}
 

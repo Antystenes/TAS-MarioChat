@@ -1,0 +1,15 @@
+<div .container>
+$if ili
+  <div .container>
+    <h2 .chat>Chat
+    <div #output>
+    <form #form>
+      <input #input type=text placeholder="Enter Message">
+$else
+  <p .tit>
+     You must be #
+     $maybe ar <- authRoute master
+       <a href=@{ar}>logged in
+     $nothing
+       logged in
+     \ to chat.

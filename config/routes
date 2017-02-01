@@ -5,6 +5,8 @@
 /favicon.ico FaviconR GET
 /robots.txt RobotsR GET
 
-/ HomeR GET POST
+/ HomeR GET
 /admin PanelR GET
 /uDel/#Text UserDelete POST
+
+/chat/#Int ChatR GET POST

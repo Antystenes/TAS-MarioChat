@@ -27,7 +27,7 @@ data App = App
     , appConnPool    :: ConnectionPool -- ^ Database connection pool.
     , appHttpManager :: Manager
     , appLogger      :: Logger
-    , appChat        :: TChan Text
+    , appChat        :: [TChan Text]
     }
 
 data MenuItem = MenuItem
@@ -104,6 +104,16 @@ instance Yesod App where
                     , menuItemAccessCallback = True
                     }
                 , NavbarLeft $ MenuItem
+                    { menuItemLabel = "Room1"
+                    , menuItemRoute = ChatR 0
+                    , menuItemAccessCallback = True
+                    }
+                , NavbarLeft $ MenuItem
+                    { menuItemLabel = "Room2"
+                    , menuItemRoute = ChatR 1
+                    , menuItemAccessCallback = True
+                    }
+                , NavbarLeft $ MenuItem
                     { menuItemLabel = "Admin Panel"
                     , menuItemRoute = PanelR
                     , menuItemAccessCallback = case madmin of
@@ -158,7 +168,7 @@ instance Yesod App where
     isAuthorized RegR _ = return Authorized
     isAuthorized PanelR _ = isAdmin
     isAuthorized (UserDelete _) _ = isAdmin
---    isAuthorized ChatR _ = isAuthenticated
+    isAuthorized (ChatR _) _ = isAuthenticated
 --    isAuthorized ProfileR _ = isAuthenticated
 
     -- This function creates static content files in the static folder
