@@ -1,6 +1,7 @@
 module Handler.Home where
 
 import Import
+import System.Process
 import System.IO.Unsafe
 import Data.Time
 import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3)
@@ -18,8 +19,12 @@ chatApp = do
     race_
         (forever $ atomically (readTChan readChan) >>= sendTextData)
         (sourceWS $$  mapM_C (\msg -> do
-                               lift (runDB $ insert (MessageLog msg (userIdent user) (pack . show . unsafePerformIO $ getZonedTime)))
                                atomically $ writeTChan writeChan $ name <> ": " <> msg
+                               let marioResponse = "#" <> name <> ": " <> (pack . unsafePerformIO $ readProcess "./MarioResponse.sh" [unpack msg] "")
+                               lift (runDB $ do
+                                        insert (MessageLog msg (userIdent user) (pack . show . unsafePerformIO $ getZonedTime))
+                                        insert (MessageLog marioResponse "Mario" (pack . show . unsafePerformIO $ getZonedTime)))
+                               atomically $ writeTChan writeChan $ "MARIO: " <> marioResponse
                             ))
 
 getHomeR :: Handler Html

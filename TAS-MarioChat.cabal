@@ -94,6 +94,7 @@ library
                  , wai
                  , wai-websockets
                  , blaze-builder
+                 , process
 
 executable         TAS-MarioChat
     if flag(library-only)

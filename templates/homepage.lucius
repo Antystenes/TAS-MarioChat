@@ -22,3 +22,7 @@ li {
     width: 100%;
     display: block;
 }
+
+.tit {
+    text-align: center;
+}

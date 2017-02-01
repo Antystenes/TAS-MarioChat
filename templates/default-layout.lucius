@@ -71,3 +71,10 @@
 #message {
     margin-bottom: 40px;
 }
+
+#login {
+    text-align: center;
+    table {
+        float: center;
+    }
+}

@@ -13,9 +13,9 @@ $if ili
     <form #form>
       <input #input type=text placeholder="Enter Message">
 $else
-  <h1>
+  <h1 .tit>
     Strona Główna
-  <p>
+  <p .tit>
      You must be #
      $maybe ar <- authRoute master
        <a href=@{ar}>logged in
